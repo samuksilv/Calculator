@@ -28,7 +28,7 @@ namespace Calculator.Web.Controllers
             catch (Exception ex)
             {
                 string error = $"Erro valores inválidos. {ex.Message}";
-                return Json(error, JsonRequestBehavior.AllowGet);
+                throw new Exception(error);
             }
         }
     }

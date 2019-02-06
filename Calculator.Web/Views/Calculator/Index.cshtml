@@ -1,0 +1,69 @@
+﻿@model Calculator.Business.ViewModels.PagamentoContaViewModel
+
+@{
+    ViewBag.Title = "Calculator - Home";
+}
+
+@section head {
+    <script type="text/javascript">   
+
+        function CalculaTroco() {
+            
+            console.log("tets");                        
+            var request = new XMLHttpRequest();
+            var data = { ValorCompra: 10, ValorPago: 20 };
+            
+            request.open("POST", "/Calculator/CalcularTroco", true);
+            request.setRequestHeader("Content-type", "application/x-www-form-urlencoded");           
+            request.send(data);
+            
+            request.onreadystatechange = function () {
+            
+                if (request.readyState == 4 && request.status == 200) {
+                    var data = request.responseText;            
+                    console.log(data);
+                }
+            }
+
+            //CalculatorController.CalcularTroco(valores, {
+            //    async: false,
+            //    success: function (result) {
+            //        console.log(result);
+            //    },
+            //    error: function (error) {
+            //        console.error(error);
+            //    }
+            //});
+        }                
+
+    </script>
+}
+    <div class=" jumbotron form-group ">
+        <div class="row  p-3">
+            <div class="col-sm-12 col-md-6 col-lg-4 ">
+                <label>
+                    @Html.ValidationMessageFor(model => model.ValorCompra)
+                </label>
+                @Html.LabelFor(model => model.ValorCompra)
+                @Html.TextBoxFor(model => model.ValorCompra, new { min = "0", placeholder = "Insira o valor da compra.", @class = "form-control", type = "number" })
+            </div>
+            <div class="col-sm-12 col-md-6 col-lg-4 ">
+
+                <label>
+                    @Html.ValidationMessageFor(model => model.ValorPago)
+                </label>
+                @Html.LabelFor(model => model.ValorPago)
+                @Html.TextBoxFor(model => model.ValorPago, new { min = "0", placeholder = "Insira o valor pago.", @class = "form-control", type = "number" })
+            </div>
+            <div class="col-sm-12 col-md-6 col-lg-6 pt-3">
+                <button type="button" class="btn btn-primary" onclick="CalculaTroco()" >Calcular troco</button>
+            </div>
+
+            <div class="col-12 pt-3">
+                <hr />
+            </div>
+
+        </div>
+
+    </div>
+

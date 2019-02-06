@@ -23,18 +23,14 @@ namespace Calculator.Tests
         public void ValoresNullos()
         {
             //arrange 
-            var calculador = new CalculaTrocoViewModel(null);               
+            var calculador = new CalculaTrocoViewModel(null);
         }
 
         [TestMethod]
         public void CalcularTrocoSucesso()
         {
-            //arrange
-            var pagamento = new PagamentoContaViewModel(100, 270);
-            var calculador = new CalculaTrocoViewModel(pagamento);
-
             //act
-            var troco= calculador.CalcularTroco();
+            var troco = CalcularTroco(100, 270);
 
             //asserts
             decimal somaCedulasMoedas = 0;
@@ -43,8 +39,35 @@ namespace Calculator.Tests
             foreach (Cedula cedula in troco.Cedulas)
                 somaCedulasMoedas += cedula.Valor;
 
-            Assert.AreEqual(troco.Valor, somaCedulasMoedas); 
+            Assert.AreEqual(troco.Valor, somaCedulasMoedas);    
         }
+
+        [TestMethod]
+        public void CalcularTrocoComValoresDecimaisSucesso()
+        {
+            //act
+            var troco = CalcularTroco(100.50m, 222.80m);
+
+            //asserts
+            decimal somaCedulasMoedas = 0;
+            foreach (Moeda moeda in troco.Moedas)
+                somaCedulasMoedas += moeda.Valor;
+            foreach (Cedula cedula in troco.Cedulas)
+                somaCedulasMoedas += cedula.Valor;
+
+            Assert.AreEqual(troco.Valor, somaCedulasMoedas);
+        }
+       
+        private TrocoViewModel CalcularTroco(decimal valorCompra, decimal ValoPago)
+        {
+            //arrange
+            var pagamento = new PagamentoContaViewModel(valorCompra, ValoPago);
+            var calculador = new CalculaTrocoViewModel(pagamento);
+
+            //act
+            return calculador.CalcularTroco();
+        }
+        
 
     }
 }
