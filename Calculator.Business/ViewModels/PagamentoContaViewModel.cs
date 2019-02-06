@@ -7,28 +7,34 @@ namespace Calculator.Business.ViewModels
     public class PagamentoContaViewModel
     {
         public PagamentoContaViewModel()
-        {
-            if (!this.IsValid()) throw new ArgumentException("Valor pago inferior ao valor da compra");
+        {            
         }
 
-        public PagamentoContaViewModel(decimal valorCompra,decimal valorPago)
+        public PagamentoContaViewModel(decimal valorCompra, decimal valorPago)
         {
             this.ValorCompra = valorCompra;
             this.ValorPago = valorPago;
-            if (!this.IsValid()) throw new ArgumentException("Valor pago inferior ao valor da compra");
+            this.IsValid();
         }
 
         [Required]
-        [Display(Name ="Valor da compra")]        
+        //[Display(Name ="Valor da compra")]        
         public decimal ValorCompra { get; set; }
 
         [Required]
-        [Display(Name = "Valor pago")]        
+        //[Display(Name = "Valor pago")]            
         public decimal ValorPago { get; set; }
 
         public bool IsValid()
         {
-            return ValorCompra <= ValorPago && ValorCompra >0 && ValorPago >0;
+            if( ValorPago <= ValorCompra)
+                throw new ArgumentException("Valor pago inferior ao valor da compra");
+            if(ValorCompra <=0)
+                throw new ArgumentException("Valor de compra não pode ser zero");
+            if (ValorPago <= 0)
+                throw new ArgumentException("Valor pago inferior ao valor da compra.");
+
+            return true;
         }
     }
 }

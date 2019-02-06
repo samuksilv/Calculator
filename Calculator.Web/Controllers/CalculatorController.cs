@@ -21,6 +21,7 @@ namespace Calculator.Web.Controllers
         {
             try
             {
+                pagamentoContaViewModel.IsValid();
                 var calculator = new CalculaTrocoViewModel(pagamentoContaViewModel);
 
                 return Json(calculator.CalcularTroco(), JsonRequestBehavior.AllowGet);

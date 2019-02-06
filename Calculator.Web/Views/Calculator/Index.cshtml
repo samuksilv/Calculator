@@ -8,36 +8,59 @@
     <script type="text/javascript">   
 
         function CalculaTroco() {
-            
-            console.log("tets");                        
+
+            var valorCompra = parseFloat (document.querySelector("[name='ValorCompra']").value);
+            var valorPago = parseFloat (document.querySelector("[name='ValorPago']").value);
+
             var request = new XMLHttpRequest();
-            var data = { ValorCompra: 10, ValorPago: 20 };
+            var data = { ValorCompra: valorCompra, ValorPago: valorPago };
             
             request.open("POST", "/Calculator/CalcularTroco", true);
-            request.setRequestHeader("Content-type", "application/x-www-form-urlencoded");           
-            request.send(data);
+            request.setRequestHeader("Content-type", "application/json");
+            console.log(JSON.stringify(data));
+            console.log(data);
+
+            request.send(JSON.stringify(data));            
             
             request.onreadystatechange = function () {
             
                 if (request.readyState == 4 && request.status == 200) {
-                    var data = request.responseText;            
-                    console.log(data);
+                    var data = JSON.parse(request.response);  
+
+                    console.log(data);                    
+                    
+                    var cedulas = data.Cedulas.reduce(function (r, a, i) {
+                        r[i] = r[i] || [];
+                        r[i].push(a);
+                        return r;
+                    }, Object.create(null));
+
+                    var moedas = data.Moedas.reduce(function (r, a, i) {
+                        r[i] = r[i] || [];
+                        r[i].push(a);
+                        return r;
+                    }, Object.create(null));
+
+                    console.log("cedulas", cedulas);
+                    console.log("moedas", moedas);
+
+                    document.querySelector("#resposeTroco").innerHTM = "";
+
+                    var element = `<p>Valor do troco : R$ ${data.Valor}</p>`;                    
+
+                    element += "<p> Detalhes: ";      
+                    
+                    element += "</p>";
+
+                    document.querySelector("#resposeTroco").innerHTML += element;
                 }
             }
-
-            //CalculatorController.CalcularTroco(valores, {
-            //    async: false,
-            //    success: function (result) {
-            //        console.log(result);
-            //    },
-            //    error: function (error) {
-            //        console.error(error);
-            //    }
-            //});
         }                
 
     </script>
 }
+
+
     <div class=" jumbotron form-group ">
         <div class="row  p-3">
             <div class="col-sm-12 col-md-6 col-lg-4 ">
@@ -61,6 +84,10 @@
 
             <div class="col-12 pt-3">
                 <hr />
+
+                <span id="resposeTroco">
+                    
+                </span>
             </div>
 
         </div>
